@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Лекція 1.1 — Цифрова безпека: паролі, 2FA, месенджери</title>
+<style>
+  :root{
+    --bg:#0f1220; --card:#191d33; --card2:#20253f; --ink:#eef0f7;
+    --muted:#9aa3c0; --accent:#5b8cff; --accent2:#37d39a; --warn:#ffb454;
+    --danger:#ff6b6b; --line:#2c3252; --radius:16px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:linear-gradient(180deg,#0c0f1c,#11152a 40%,#0c0f1c);
+    color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.65; font-size:17px;
+  }
+  .wrap{max-width:880px; margin:0 auto; padding:24px 20px 80px}
+  header.hero{
+    background:radial-gradient(1200px 400px at 20% -10%,rgba(91,140,255,.25),transparent),
+               radial-gradient(900px 400px at 100% 0%,rgba(55,211,154,.18),transparent);
+    border:1px solid var(--line); border-radius:24px; padding:36px 28px; margin-top:14px;
+  }
+  .pill{display:inline-block; font-size:13px; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--accent2); background:rgba(55,211,154,.1); border:1px solid rgba(55,211,154,.3);
+    padding:5px 12px; border-radius:999px; margin-bottom:14px}
+  h1{font-size:32px; line-height:1.2; margin:.1em 0 .3em}
+  h2{font-size:24px; margin:2.2em 0 .5em; scroll-margin-top:20px}
+  h3{font-size:19px; margin:1.4em 0 .3em; color:#dfe4ff}
+  .sub{color:var(--muted); font-size:16px; max-width:640px}
+  .meta{display:flex; flex-wrap:wrap; gap:10px; margin-top:18px}
+  .meta span{font-size:14px; color:var(--muted); background:var(--card);
+    border:1px solid var(--line); padding:6px 12px; border-radius:10px}
+  nav.toc{background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:18px 20px; margin-top:24px}
+  nav.toc strong{display:block; margin-bottom:8px; color:#cfd6ff; font-size:14px; text-transform:uppercase; letter-spacing:.05em}
+  nav.toc a{color:var(--accent); text-decoration:none; display:inline-block; margin:4px 14px 4px 0; font-size:15px}
+  nav.toc a:hover{text-decoration:underline}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px 24px; margin:16px 0}
+  .goal{border-left:4px solid var(--accent2)}
+  .timeline{position:relative; margin:10px 0}
+  .seg{display:flex; gap:16px; padding:14px 0; border-bottom:1px solid var(--line)}
+  .seg:last-child{border-bottom:none}
+  .time{flex:0 0 86px; font-weight:700; color:var(--accent); font-variant-numeric:tabular-nums}
+  .seg-body{flex:1}
+  .seg-body b{color:#fff}
+  .say{background:var(--card2); border-radius:12px; padding:12px 16px; margin-top:8px;
+    color:#e7eaff; font-style:italic; border-left:3px solid var(--accent)}
+  .say::before{content:"🎙 Кажемо: "; font-style:normal; color:var(--accent2); font-weight:600}
+  .steps{counter-reset:step; list-style:none; padding:0; margin:10px 0}
+  .steps li{counter-increment:step; position:relative; padding:10px 0 10px 44px; border-bottom:1px dashed var(--line)}
+  .steps li:last-child{border-bottom:none}
+  .steps li::before{content:counter(step); position:absolute; left:0; top:8px;
+    width:30px; height:30px; background:var(--accent); color:#0b1020; font-weight:700;
+    border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:15px}
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  @media(max-width:640px){.grid{grid-template-columns:1fr}}
+  .bad,.good{border-radius:12px; padding:14px 16px; font-size:15px}
+  .bad{background:rgba(255,107,107,.08); border:1px solid rgba(255,107,107,.35)}
+  .good{background:rgba(55,211,154,.08); border:1px solid rgba(55,211,154,.35)}
+  .bad b{color:var(--danger)} .good b{color:var(--accent2)}
+  .tip{background:rgba(255,180,84,.08); border:1px solid rgba(255,180,84,.35);
+    border-radius:12px; padding:14px 16px; margin:14px 0; font-size:15px}
+  .tip b{color:var(--warn)}
+  code{background:#0c1024; padding:2px 7px; border-radius:6px; font-size:.92em; color:#a9c2ff}
+  .check{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:8px 22px 18px}
+  .check label{display:flex; align-items:flex-start; gap:12px; padding:12px 0; border-bottom:1px solid var(--line); cursor:pointer}
+  .check label:last-child{border-bottom:none}
+  .check input{width:22px; height:22px; margin-top:2px; accent-color:var(--accent2); flex:0 0 auto; cursor:pointer}
+  .check input:checked + span{color:var(--muted); text-decoration:line-through}
+  .progress{height:10px; background:#0c1024; border-radius:999px; overflow:hidden; margin:14px 0 4px}
+  .progress > div{height:100%; width:0; background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:width .3s}
+  .pcount{font-size:14px; color:var(--muted)}
+  table.gloss{width:100%; border-collapse:collapse; margin-top:8px}
+  table.gloss td{padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top; font-size:15px}
+  table.gloss td:first-child{font-weight:700; color:#dfe4ff; white-space:nowrap; width:36%}
+  .hw{background:rgba(91,140,255,.07); border:1px solid rgba(91,140,255,.35); border-radius:var(--radius); padding:20px 24px}
+  footer{margin-top:50px; text-align:center; color:var(--muted); font-size:14px}
+  footer a{color:var(--accent); text-decoration:none}
+  .btn{display:inline-block; margin-top:10px; background:var(--accent); color:#0b1020; font-weight:600;
+    padding:9px 16px; border-radius:10px; border:none; cursor:pointer; font-size:15px}
+  .btn.ghost{background:transparent; color:var(--accent); border:1px solid var(--accent)}
+  .card a, .hw a, .tip a, .bad a, .good a, table.gloss a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(91,140,255,.45)}
+  .card a:hover, .hw a:hover, .tip a:hover{border-bottom-color:var(--accent)}
+  .applinks{display:flex; flex-wrap:wrap; gap:10px; margin:12px 0 4px}
+  .applinks a{display:inline-flex; align-items:center; gap:8px; background:var(--card2);
+    border:1px solid var(--line); border-radius:10px; padding:9px 14px; font-size:15px;
+    color:#dfe4ff; text-decoration:none; border-bottom:1px solid var(--line)}
+  .applinks a:hover{border-color:var(--accent); color:#fff}
+  .applinks a b{color:#fff}
+  .article{display:block; background:var(--card2); border:1px solid var(--line); border-radius:12px;
+    padding:14px 16px; margin:10px 0; text-decoration:none; border-left:3px solid var(--accent)}
+  .article:hover{border-color:var(--accent)}
+  .article .at{display:block; color:#fff; font-weight:600; font-size:16px; margin-bottom:2px}
+  .article .ad{display:block; color:var(--muted); font-size:14px}
+  .article .au{color:var(--accent); font-size:13px}
+  @media print{body{background:#fff; color:#000} .card,.check,nav.toc,header.hero{border-color:#ccc; background:#fff} .say{background:#f4f4f4}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="pill">Модуль 1 · Цифрова безпека та гігієна</span>
+    <h1>Лекція 1.1 — Надійні паролі, 2FA та захищені месенджери</h1>
+    <p class="sub">Простий посібник Школи розвитку цифрових навичок. Тут зібрано все, що потрібно, щоб захистити свої акаунти: надійні паролі, двофакторна автентифікація та приватність у месенджерах. Читайте по черзі й робіть кроки разом із текстом.</p>
+    <div class="meta">
+      <span>🔐 Захист акаунтів</span>
+      <span>🛡 Двофакторна автентифікація</span>
+      <span>💬 Приватність у месенджерах</span>
+      <span>✅ Власний чек-лист</span>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <strong>Зміст</strong>
+    <a href="#goal">Навіщо це</a>
+    <a href="#passwords">Паролі</a>
+    <a href="#manager">Менеджер паролів</a>
+    <a href="#2fa">2FA</a>
+    <a href="#messengers">Месенджери</a>
+    <a href="#phishing">Фішинг</a>
+    <a href="#checklist">Чек-лист</a>
+    <a href="#homework">Домашнє</a>
+    <a href="#glossary">Словничок</a>
+    <a href="#articles">Що почитати</a>
+  </nav>
+
+  <section id="goal">
+    <h2>🎯 Навіщо це вам</h2>
+    <div class="card goal">
+      Ваш телефон і пошта — це доступ до фото, документів, грошей і спілкування з рідними. Якщо акаунт зламають, наслідки реальні: втрата листування, доступу до банку, фейкові повідомлення вашим контактам.<br><br>
+      Хороша новина: щоб захиститися, не треба бути технічним фахівцем. Достатньо трьох простих звичок — <b>надійні паролі</b>, <b>двофакторна автентифікація</b> та <b>приватність у месенджерах</b>. Пройдіть кроки нижче — і наприкінці заповніть свій особистий чек-лист.
+    </div>
+  </section>
+
+  <section id="passwords">
+    <h2>🔑 Надійні паролі</h2>
+    <p>Слабкий пароль — найчастіша причина зламу. Прості паролі підбираються програмою за секунди.</p>
+    <div class="grid">
+      <div class="bad">
+        <b>❌ Небезпечно</b><br>
+        <code>123456</code>, <code>qwerty</code>, <code>password</code><br>
+        дата народження, ім'я дитини, <code>Ivan2010</code><br>
+        один пароль на всі сайти
+      </div>
+      <div class="good">
+        <b>✅ Надійно</b><br>
+        12+ символів: великі й малі літери, цифри, знаки<br>
+        фраза-вигадка: <code>Кава!о7ранку#Льв1в</code><br>
+        свій пароль для кожного сайту
+      </div>
+    </div>
+    <div class="tip"><b>Лайфхак:</b> придумайте довгу фразу, яку легко згадати, і «зіпсуйте» її цифрами та знаками. Наприклад: «Моя кішка Мурка любить рибу» → <code>МояК1шкаМурк@love#рибу</code>.</div>
+  </section>
+
+  <section id="manager">
+    <h2>🗝 Менеджер паролів</h2>
+    <p>Це програма-сейф, яка створює складні паролі та зберігає їх за вас. Ви пам'ятаєте лише <b>один головний пароль</b>.</p>
+    <div class="applinks">
+      <a href="https://bitwarden.com/download/" target="_blank" rel="noopener">⬇️ <b>Bitwarden</b> — завантажити</a>
+      <a href="https://bitwarden.com/" target="_blank" rel="noopener">🌐 Сайт Bitwarden</a>
+      <a href="https://proton.me/pass" target="_blank" rel="noopener">🔐 Альтернатива: Proton Pass</a>
+    </div>
+    <h3>Як почати (на прикладі Bitwarden)</h3>
+    <ol class="steps">
+      <li>Встановіть застосунок <b>Bitwarden</b> (<a href="https://bitwarden.com/download/" target="_blank" rel="noopener">завантажити для телефона чи браузера</a>).</li>
+      <li>Зареєструйтесь і придумайте один сильний <b>головний пароль</b> — його ніде не записуйте, лише запам'ятайте.</li>
+      <li>Коли заходите на сайт, дозвольте Bitwarden зберегти логін і пароль.</li>
+      <li>Для нового акаунта натисніть «Згенерувати пароль» — програма створить надійний автоматично.</li>
+    </ol>
+    <div class="tip"><b>Простіший варіант для початку:</b> вбудований менеджер у браузері Chrome або Safari теж зберігає паролі та пропонує надійні. Головне — захистіть сам пристрій паролем чи відбитком.</div>
+  </section>
+
+  <section id="2fa">
+    <h2>🛡 Двофакторна автентифікація (2FA)</h2>
+    <p>2FA — це <b>другий крок входу</b> після пароля: код із SMS, із застосунку (Google Authenticator) або підтвердження на телефоні. Навіть якщо пароль вкрали, без вашого телефону зайти не зможуть. <b>Це найважливіше, що варто зробити сьогодні.</b></p>
+    <div class="applinks">
+      <a href="https://support.google.com/accounts/answer/1066447" target="_blank" rel="noopener">📲 Google Authenticator</a>
+      <a href="https://www.microsoft.com/security/mobile-authenticator-app" target="_blank" rel="noopener">📲 Microsoft Authenticator</a>
+      <a href="https://myaccount.google.com/security" target="_blank" rel="noopener">🔧 Безпека Google-акаунта</a>
+    </div>
+
+    <h3>📧 Gmail (Google)</h3>
+    <ol class="steps">
+      <li>Відкрийте <code>myaccount.google.com</code> → розділ <b>Безпека</b>.</li>
+      <li>Знайдіть <b>«Двоетапна перевірка»</b> і натисніть <b>Почати</b>.</li>
+      <li>Введіть номер телефону → отримайте код у SMS → підтвердьте.</li>
+      <li>Готово. Бажано додати резервні коди й зберегти їх у надійному місці.</li>
+    </ol>
+
+    <h3>📘 Facebook</h3>
+    <ol class="steps">
+      <li>Меню → <b>Налаштування і конфіденційність</b> → <b>Налаштування</b>.</li>
+      <li>Розділ <b>Безпека і вхід</b> → <b>Двофакторна автентифікація</b>.</li>
+      <li>Оберіть спосіб: застосунок-автентифікатор або SMS → підтвердьте.</li>
+    </ol>
+
+    <h3>✈️ Telegram (хмарний пароль)</h3>
+    <ol class="steps">
+      <li><b>Налаштування</b> → <b>Конфіденційність і безпека</b>.</li>
+      <li><b>Хмарний пароль / Двоетапна перевірка</b> → <b>Установити пароль</b>.</li>
+      <li>Придумайте пароль і вкажіть e-mail для відновлення.</li>
+    </ol>
+
+    <h3>🏦 Банк (Приват24 / monobank та ін.)</h3>
+    <ol class="steps">
+      <li>Зазвичай 2FA увімкнена за замовчуванням: вхід за PIN/відбитком + SMS-код.</li>
+      <li>Перевірте в налаштуваннях безпеки, що увімкнено підтвердження входу та операцій.</li>
+      <li><b>Ніколи й нікому</b> не повідомляйте коди з SMS — банк їх не запитує по телефону.</li>
+    </ol>
+
+    <div class="tip"><b>Важливо:</b> застосунок-автентифікатор (Google Authenticator, Microsoft Authenticator) надійніший за SMS, бо код не можна перехопити чи підмінити SIM-карту.</div>
+  </section>
+
+  <section id="messengers">
+    <h2>💬 Захищені месенджери та приватність</h2>
+    <p><b>Наскрізне шифрування (E2EE)</b> — це коли повідомлення бачать лише відправник і отримувач. Ані компанія, ані сторонні особи прочитати їх не можуть.</p>
+    <div class="grid">
+      <div class="good">
+        <b>✅ Signal</b><br>
+        Усі чати зашифровані за замовчуванням. Мінімум даних про вас. Рекомендований для чутливого листування.
+      </div>
+      <div class="bad">
+        <b>⚠️ Звичайні чати</b><br>
+        У Telegram звичайні чати зберігаються в хмарі й <u>не</u> наскрізно зашифровані. Для приватного — використовуйте <b>«Секретний чат»</b>.
+      </div>
+    </div>
+    <div class="applinks">
+      <a href="https://signal.org/" target="_blank" rel="noopener">🔵 Завантажити Signal</a>
+      <a href="https://telegram.org/" target="_blank" rel="noopener">✈️ Завантажити Telegram</a>
+    </div>
+    <h3>Базова приватність у Telegram</h3>
+    <ol class="steps">
+      <li><b>Налаштування</b> → <b>Конфіденційність і безпека</b>.</li>
+      <li>Сховайте <b>номер телефону</b> і <b>час останнього входу</b> → «Мої контакти» або «Ніхто».</li>
+      <li>Обмежте, хто може додавати вас у групи й бачити фото профілю.</li>
+      <li>Для приватної розмови відкрийте <b>«Секретний чат»</b> (наскрізне шифрування).</li>
+    </ol>
+  </section>
+
+  <section id="phishing">
+    <h2>🎣 Фішинг: як вас намагаються обдурити</h2>
+    <p><b>Фішинг</b> — це коли шахраї надсилають фейкове повідомлення (SMS, лист, чат), щоб ви ввели пароль, код або дані картки на підробленому сайті. Виглядає як справжнє — від банку, «Дії», пошти чи знайомого. Особливо часто шахраї пишуть переселенцям про «виплати» й «допомогу».</p>
+
+    <h3>Реальні приклади (так роблять шахраї)</h3>
+    <div class="bad" style="margin-bottom:12px">
+      <b>❌ «Виплата для переселенців»</b><br>
+      «Вам нараховано 6600 грн допомоги від ООН/держави. Отримайте за посиланням: <code>dopomoga-vyplaty.com</code>». → Веде на фейковий сайт, що просить дані картки й CVV.
+    </div>
+    <div class="bad" style="margin-bottom:12px">
+      <b>❌ «Нова пошта / посилка»</b><br>
+      «Ваша посилка затримана, доплатіть 38 грн: <code>np-dostavka.top</code>». → Фейкова сторінка оплати, що краде картку.
+    </div>
+    <div class="bad" style="margin-bottom:12px">
+      <b>❌ «Банк заблокував картку»</b><br>
+      Дзвінок або SMS: «Підозріла операція. Назвіть код із SMS, щоб скасувати». → Банк НІКОЛИ не просить код. Код кажете — гроші зникають.
+    </div>
+    <div class="bad" style="margin-bottom:12px">
+      <b>❌ «Ви виграли» / «Підтвердіть акаунт»</b><br>
+      Лист «нібито від Facebook/Gmail»: «Ваш акаунт буде видалено, увійдіть тут». → Підроблена сторінка входу краде пароль.
+    </div>
+
+    <h3>Як розпізнати й що робити</h3>
+    <div class="grid">
+      <div class="bad">
+        <b>🚩 Тривожні ознаки</b><br>
+        терміновість і погрози («негайно», «заблокуємо»)<br>
+        дивна адреса сайту з помилками<br>
+        просять код, пароль або CVV картки<br>
+        несподіваний виграш чи «безкоштовні гроші»
+      </div>
+      <div class="good">
+        <b>✅ Безпечні дії</b><br>
+        не переходьте за посиланням із повідомлення<br>
+        зайдіть на сайт банку/сервісу вручну<br>
+        ніколи нікому не кажіть коди з SMS<br>
+        сумніваєтесь — зателефонуйте на офіційний номер
+      </div>
+    </div>
+    <div class="tip"><b>Золоте правило:</b> якщо вас кваплять і просять код, пароль чи дані картки — це майже завжди шахрайство. Зупиніться й перевірте через офіційний застосунок або сайт.</div>
+  </section>
+
+  <section id="checklist">
+    <h2>✅ Мій чек-лист безпеки</h2>
+    <p class="sub">Відмічайте пункти, які вже зробили — прогрес зберігається у вашому браузері. Мета — щоб усі галочки були поставлені. Можна роздрукувати.</p>
+    <div class="check" id="checklist-box">
+      <div class="progress"><div id="bar"></div></div>
+      <div class="pcount" id="pcount">Виконано: 0 з 9</div>
+      <label><input type="checkbox"><span>Замінила слабкі паролі на надійні (12+ символів)</span></label>
+      <label><input type="checkbox"><span>Для кожного важливого сайту — окремий пароль</span></label>
+      <label><input type="checkbox"><span>Встановила менеджер паролів (Bitwarden / у браузері)</span></label>
+      <label><input type="checkbox"><span>Увімкнула 2FA на Gmail</span></label>
+      <label><input type="checkbox"><span>Увімкнула 2FA на Facebook</span></label>
+      <label><input type="checkbox"><span>Встановила хмарний пароль у Telegram</span></label>
+      <label><input type="checkbox"><span>Перевірила безпеку входу в банк</span></label>
+      <label><input type="checkbox"><span>Налаштувала приватність у месенджері</span></label>
+      <label><input type="checkbox"><span>Знаю, як розпізнати фішинг, і не переходжу за підозрілими посиланнями</span></label>
+      <button class="btn ghost" onclick="window.print()">🖨 Роздрукувати чек-лист</button>
+    </div>
+  </section>
+
+  <section id="homework">
+    <h2>📝 Що зробити вдома</h2>
+    <div class="hw">
+      Складіть перелік своїх ключових акаунтів (пошта, соцмережі, банк, месенджери) і навпроти кожного позначте, де вже ввімкнено 2FA, а де — ще ні. Мета — щоб 2FA була увімкнена скрізь, де це можливо.
+      <br><br>
+      <b>Приклад таблиці:</b>
+      <table class="gloss" style="margin-top:10px">
+        <tr><td>Акаунт</td><td>2FA увімкнено?</td></tr>
+        <tr><td>Gmail</td><td>✅ так</td></tr>
+        <tr><td>Facebook</td><td>❌ ще ні</td></tr>
+        <tr><td>Telegram</td><td>✅ так</td></tr>
+        <tr><td>Банк</td><td>✅ так</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section id="glossary">
+    <h2>📖 Словничок</h2>
+    <div class="card">
+      <table class="gloss">
+        <tr><td>Акаунт</td><td>Ваш обліковий запис на сайті чи в застосунку (пошта, соцмережа, банк).</td></tr>
+        <tr><td>2FA / двофакторка</td><td>Двофакторна автентифікація — другий крок входу (код), окрім пароля.</td></tr>
+        <tr><td>Менеджер паролів</td><td>Програма-сейф, що створює й зберігає складні паролі за вас.</td></tr>
+        <tr><td>Наскрізне шифрування (E2EE)</td><td>Повідомлення може прочитати лише відправник і отримувач.</td></tr>
+        <tr><td>Автентифікатор</td><td>Застосунок, що генерує одноразові коди для входу (надійніше за SMS).</td></tr>
+        <tr><td>Цифровий слід</td><td>Сліди, які ви залишаєте в інтернеті: дані, фото, дописи, відвідування.</td></tr>
+        <tr><td>Фішинг</td><td>Шахрайство, коли вас обманом змушують ввести пароль чи код на фейковому сайті.</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section id="articles">
+    <h2>📚 Що почитати далі</h2>
+    <p class="sub">Перевірені безкоштовні ресурси, щоб поглибити знання. Відкривайте у вільний час.</p>
+
+    <a class="article" href="https://osvita.diia.gov.ua/" target="_blank" rel="noopener">
+      <span class="at">Дія.Освіта — серія «Цифрова безпека»</span>
+      <span class="ad">Безкоштовні відеокурси українською: паролі, захист акаунтів, безпека в мережі.</span>
+      <span class="au">osvita.diia.gov.ua · українською</span>
+    </a>
+
+    <a class="article" href="https://safety.google/intl/uk/" target="_blank" rel="noopener">
+      <span class="at">Центр безпеки Google</span>
+      <span class="ad">Як захистити Google-акаунт, налаштувати 2FA та керувати приватністю.</span>
+      <span class="au">safety.google · українською</span>
+    </a>
+
+    <a class="article" href="https://bank.gov.ua/ua/about/fingramota" target="_blank" rel="noopener">
+      <span class="at">НБУ: фінансова грамотність і захист від шахраїв</span>
+      <span class="ad">Як розпізнати фінансове шахрайство й фішинг, що робити, якщо ви стали жертвою.</span>
+      <span class="au">bank.gov.ua · українською</span>
+    </a>
+
+    <a class="article" href="https://cert.gov.ua/recommendations" target="_blank" rel="noopener">
+      <span class="at">CERT-UA: рекомендації з кібербезпеки</span>
+      <span class="ad">Поради урядової команди реагування на кіберзагрози для звичайних користувачів.</span>
+      <span class="au">cert.gov.ua · українською</span>
+    </a>
+
+    <a class="article" href="https://haveibeenpwned.com/" target="_blank" rel="noopener">
+      <span class="at">Have I Been Pwned — перевірте, чи витік ваш пароль</span>
+      <span class="ad">Введіть свою пошту й дізнайтесь, чи потрапляла вона у відомі витоки даних.</span>
+      <span class="au">haveibeenpwned.com · англійською (простий у користуванні)</span>
+    </a>
+
+    <a class="article" href="https://ssd.eff.org/" target="_blank" rel="noopener">
+      <span class="at">Surveillance Self-Defense (EFF)</span>
+      <span class="ad">Докладний посібник із цифрового самозахисту від правозахисної організації EFF.</span>
+      <span class="au">ssd.eff.org · англійською</span>
+    </a>
+  </section>
+
+  <footer>
+    Школа розвитку цифрових навичок · Модуль 1, Лекція 1.1<br>
+    <a href="https://matsuka.wiki" target="_blank">matsuka.wiki</a> · <a href="https://matsuka.online" target="_blank">matsuka.online</a>
+  </footer>
+
+</div>
+
+<script>
+  (function(){
+    var box = document.getElementById('checklist-box');
+    var boxes = box.querySelectorAll('input[type=checkbox]');
+    var bar = document.getElementById('bar');
+    var pcount = document.getElementById('pcount');
+    var KEY = 'sec_checklist_v1';
+
+    function save(){
+      var state = [];
+      boxes.forEach(function(c){ state.push(c.checked); });
+      try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+    }
+    function load(){
+      try{
+        var s = JSON.parse(localStorage.getItem(KEY) || '[]');
+        boxes.forEach(function(c,i){ if(s[i]) c.checked = true; });
+      }catch(e){}
+    }
+    function update(){
+      var done = 0;
+      boxes.forEach(function(c){ if(c.checked) done++; });
+      var pct = Math.round(done / boxes.length * 100);
+      bar.style.width = pct + '%';
+      pcount.textContent = 'Виконано: ' + done + ' з ' + boxes.length;
+    }
+    load();
+    update();
+    boxes.forEach(function(c){
+      c.addEventListener('change', function(){ save(); update(); });
+    });
+  })();
+</script>
+</body>
+</html>
