@@ -120,7 +120,15 @@
   .quizrow:last-of-type{border-bottom:none}
   .quizrow input{width:22px; height:22px; margin-top:2px; accent-color:var(--accent2); flex:0 0 auto; cursor:pointer}
   .btn[disabled]{opacity:.5}
-  @media print{body{background:#fff; color:#000} .card,.check,nav.toc,header.hero{border-color:#ccc; background:#fff} .say{background:#f4f4f4}}
+  .share{display:flex; flex-wrap:wrap; gap:10px; margin:4px 0 10px}
+  .share a, .share button{display:inline-flex; align-items:center; gap:8px; padding:11px 16px; border-radius:10px; font-size:15px; font-weight:600; text-decoration:none; border:none; cursor:pointer; color:#fff}
+  .share .tg{background:#2aabee} .share .wa{background:#25d366; color:#06351a} .share .vb{background:#7360f2}
+  .share .cp{background:var(--card2); color:var(--ink); border:1px solid var(--line)}
+  .qrbox{display:flex; gap:22px; align-items:center; flex-wrap:wrap}
+  .qrbox .qr{background:#fff; border-radius:12px; padding:8px; line-height:0}
+  .qrbox .qr svg{width:150px; height:150px; display:block}
+  .sos-h{color:#ff9d9d}
+  @media print{body{background:#fff; color:#000} .card,.check,nav.toc,header.hero{border-color:#ccc; background:#fff} .say{background:#f4f4f4} #share{display:none}}
 </style>
 </head>
 <body>
@@ -148,9 +156,12 @@
     <a href="#messengers">Месенджери</a>
     <a href="#phishing">Фішинг</a>
     <a href="#sim">🎣 Симулятор фішингу</a>
+    <a href="#sos">🆘 Якщо зламали</a>
     <a href="#checklist">Чек-лист</a>
     <a href="#quiz">📊 Тест безпеки</a>
     <a href="#homework">Домашнє</a>
+    <a href="#aliases">📧 Псевдоніми пошти</a>
+    <a href="#proton">🛡 Proton Mail</a>
     <a href="#glossary">Словничок</a>
     <a href="#articles">Що почитати</a>
   </nav>
@@ -350,6 +361,34 @@
     </div>
   </section>
 
+  <section id="sos">
+    <h2>🆘 Що робити, якщо вже зламали або обдурили</h2>
+    <p class="sub">Швидкі дії в перші хвилини рятують гроші й акаунти. Збережіть цей розділ.</p>
+
+    <h3 class="sos-h">💳 Якщо вкрали гроші або дані картки</h3>
+    <ol class="steps">
+      <li>Негайно зателефонуйте в банк за номером на звороті картки і <b>заблокуйте картку</b> (або заблокуйте її у застосунку банку).</li>
+      <li>Змініть пароль до інтернет-банкінгу.</li>
+      <li>Подайте заяву в Кіберполіцію: <a href="https://ticket.cyberpolice.gov.ua/" target="_blank" rel="noopener">ticket.cyberpolice.gov.ua</a> або за тел. <b>0 800 505 170</b>.</li>
+    </ol>
+
+    <h3 class="sos-h">📧 Якщо зламали пошту або соцмережу</h3>
+    <ol class="steps">
+      <li>Якщо ще маєте доступ — одразу <b>змініть пароль</b> та увімкніть 2FA.</li>
+      <li>У налаштуваннях безпеки натисніть <b>«Вийти на всіх пристроях»</b> (завершити всі сесії).</li>
+      <li>Попередьте рідних і друзів, що від вашого імені можуть просити гроші.</li>
+      <li>Втратили доступ — скористайтесь відновленням акаунта («Забули пароль?») на сайті сервісу.</li>
+    </ol>
+
+    <h3 class="sos-h">📱 Якщо SIM-картка раптом перестала працювати</h3>
+    <ol class="steps">
+      <li>Можливо, шахраї перевипустили вашу SIM. Зателефонуйте оператору й попросіть <b>заблокувати обидві картки</b>.</li>
+      <li>Негайно заблокуйте доступ до банку й акаунтів, прив'язаних до цього номера.</li>
+    </ol>
+
+    <div class="tip"><b>Головні контакти:</b> Кіберполіція — <b>0 800 505 170</b> та <a href="https://ticket.cyberpolice.gov.ua/" target="_blank" rel="noopener">ticket.cyberpolice.gov.ua</a>. Банк — номер на звороті вашої картки.</div>
+  </section>
+
   <section id="checklist">
     <h2>✅ Мій чек-лист безпеки</h2>
     <p class="sub">Відмічайте пункти, які вже зробили — прогрес зберігається у вашому браузері. Мета — щоб усі галочки були поставлені. Можна роздрукувати.</p>
@@ -392,6 +431,56 @@
         <tr><td>Telegram</td><td>✅ так</td></tr>
         <tr><td>Банк</td><td>✅ так</td></tr>
       </table>
+    </div>
+  </section>
+
+  <section id="aliases">
+    <h2>📧 Email-псевдоніми: захистіть справжню пошту</h2>
+    <p>Псевдонім (масковий email) — це одноразова адреса, яка пересилає листи на вашу справжню пошту. Реєструючись на сайтах через псевдонім, ви не світите справжню адресу: якщо туди почне сипатися спам або станеться витік — ви просто вимикаєте псевдонім, а основна пошта лишається чистою.</p>
+
+    <h3>🦊 Firefox Relay (Mozilla)</h3>
+    <p>Безкоштовно до 5 псевдонімів, працює в будь-якому браузері.</p>
+    <ol class="steps">
+      <li>Відкрийте <a href="https://relay.firefox.com/" target="_blank" rel="noopener">relay.firefox.com</a> та увійдіть через акаунт Firefox (або створіть його).</li>
+      <li>Натисніть <b>«Generate new mask»</b> — отримаєте випадкову адресу виду <code>щось@mozmail.com</code>.</li>
+      <li>Вставляйте цю адресу під час реєстрації на сайтах — листи прийдуть на вашу справжню пошту.</li>
+      <li>Почався спам — вимкніть або видаліть псевдонім, і листи перестануть надходити.</li>
+    </ol>
+    <div class="applinks"><a href="https://relay.firefox.com/" target="_blank" rel="noopener">🦊 relay.firefox.com</a></div>
+
+    <h3>🔐 SimpleLogin (від Proton)</h3>
+    <p>Безкоштовно до 10 псевдонімів, працює на всіх пристроях; можна навіть відповідати з псевдоніма.</p>
+    <ol class="steps">
+      <li>Відкрийте <a href="https://simplelogin.io/" target="_blank" rel="noopener">simplelogin.io</a> і створіть безкоштовний акаунт.</li>
+      <li>Натисніть <b>«New Alias»</b> — згенерується нова адреса для пересилання.</li>
+      <li>Встановіть розширення для браузера, щоб створювати псевдоніми в один клік під час реєстрації.</li>
+    </ol>
+    <div class="applinks"><a href="https://simplelogin.io/" target="_blank" rel="noopener">🔐 simplelogin.io</a></div>
+
+    <h3>🍎 Hide My Email (Apple)</h3>
+    <p>Для власників iPhone/Mac з підпискою iCloud+. Створює адреси виду <code>щось@icloud.com</code>.</p>
+    <ol class="steps">
+      <li>На iPhone: <b>Налаштування → [ваше ім'я] → iCloud → «Сховати мою електронну пошту»</b>.</li>
+      <li>Натисніть <b>«Створити нову адресу»</b> і збережіть її.</li>
+      <li>У Safari чи під час «Вхід з Apple» обирайте <b>«Сховати мою пошту»</b>, щоб не світити справжню адресу.</li>
+    </ol>
+    <div class="applinks"><a href="https://support.apple.com/guide/icloud/set-up-hide-my-email-mm9d9012c9e8/icloud" target="_blank" rel="noopener">🍎 Інструкція Apple</a></div>
+
+    <div class="tip"><b>Порада:</b> заведіть окремий псевдонім для важливих сервісів (банк, держпослуги) і окремий — для розсилок та магазинів. Так легше тримати важливу пошту в чистоті.</div>
+  </section>
+
+  <section id="proton">
+    <h2>🛡 Захищена пошта Proton Mail</h2>
+    <p>Proton Mail — безкоштовна пошта швейцарського сервісу з <b>наскрізним шифруванням</b>: листи зберігаються зашифрованими, і навіть сам сервіс не може їх прочитати. Хороший вибір для приватного листування і як надійна «головна» скринька.</p>
+    <ol class="steps">
+      <li>Відкрийте <a href="https://proton.me/mail" target="_blank" rel="noopener">proton.me/mail</a> та натисніть <b>«Create free account»</b>.</li>
+      <li>Придумайте надійний пароль (скористайтеся тренажером вище ☝️) і збережіть його в менеджері паролів.</li>
+      <li>Одразу увімкніть <b>двофакторну автентифікацію</b> в налаштуваннях безпеки.</li>
+      <li>Готово — користуйтеся в браузері або через застосунок Proton Mail на телефоні.</li>
+    </ol>
+    <div class="applinks">
+      <a href="https://proton.me/mail" target="_blank" rel="noopener">🛡 proton.me/mail</a>
+      <a href="https://proton.me/pass" target="_blank" rel="noopener">🔑 Proton Pass — паролі + псевдоніми</a>
     </div>
   </section>
 
@@ -449,6 +538,23 @@
       <span class="ad">Докладний посібник із цифрового самозахисту від правозахисної організації EFF.</span>
       <span class="au">ssd.eff.org · англійською</span>
     </a>
+  </section>
+
+  <section id="share">
+    <h2>📲 Поділіться з подругами</h2>
+    <p class="sub">Надішліть цей посібник тим, кому він стане в пригоді, або відскануйте QR-код, щоб відкрити на телефоні.</p>
+    <div class="widget qrbox">
+      <div class="qr"><svg width="195" height="195" class="segno"><g transform="scale(5)"><path fill="#fff" d="M0 0h39v39h-39z"/><path class="qrline" stroke="#0f1220" d="M3 3.5h7m1 0h1m5 0h1m2 0h1m1 0h1m1 0h3m2 0h7m-33 1h1m5 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h1m2 0h2m1 0h2m1 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h3m1 0h3m5 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m3 0h1m7 0h1m1 0h1m3 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m3 0h1m2 0h4m1 0h1m3 0h3m1 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h4m2 0h1m3 0h4m4 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h2m1 0h1m2 0h2m1 0h1m2 0h2m1 0h2m-24 1h1m1 0h1m1 0h4m1 0h1m1 0h1m1 0h2m5 0h1m2 0h4m1 0h2m1 0h1m-33 1h6m1 0h3m4 0h3m3 0h3m1 0h4m3 0h2m-33 1h2m1 0h1m2 0h1m1 0h4m1 0h1m2 0h2m1 0h1m1 0h1m2 0h2m1 0h2m1 0h3m-29 1h1m2 0h1m2 0h1m1 0h3m3 0h1m2 0h2m3 0h1m1 0h2m1 0h1m-31 1h1m1 0h1m2 0h8m4 0h1m2 0h1m1 0h4m2 0h1m2 0h1m-33 1h5m9 0h1m1 0h2m1 0h2m1 0h1m1 0h1m1 0h1m1 0h1m1 0h3m-32 1h1m1 0h1m1 0h4m1 0h1m1 0h1m2 0h2m1 0h1m1 0h4m1 0h2m1 0h2m1 0h1m-32 1h6m1 0h2m1 0h1m2 0h1m1 0h2m2 0h1m1 0h1m1 0h1m2 0h1m4 0h1m-32 1h4m2 0h3m1 0h1m1 0h1m3 0h1m3 0h3m3 0h1m1 0h1m2 0h1m-32 1h2m6 0h1m1 0h1m1 0h1m1 0h1m2 0h2m2 0h5m1 0h1m1 0h1m1 0h1m-29 1h1m2 0h4m1 0h1m1 0h1m6 0h1m4 0h2m3 0h3m-31 1h1m1 0h2m2 0h1m2 0h1m1 0h3m1 0h5m1 0h5m3 0h1m-32 1h3m2 0h4m1 0h1m2 0h1m2 0h4m1 0h1m1 0h3m5 0h1m-29 1h3m3 0h1m3 0h1m1 0h1m2 0h1m1 0h2m2 0h3m2 0h4m-33 1h3m1 0h1m1 0h3m1 0h1m1 0h3m4 0h2m1 0h1m1 0h7m1 0h1m-32 1h1m5 0h1m3 0h2m2 0h1m1 0h2m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m-32 1h1m3 0h1m1 0h1m1 0h3m1 0h3m1 0h1m1 0h1m1 0h2m2 0h5m2 0h1m-24 1h1m2 0h1m3 0h2m1 0h2m1 0h4m3 0h2m1 0h2m-33 1h7m1 0h1m1 0h1m2 0h2m2 0h2m1 0h3m1 0h1m1 0h1m1 0h4m-32 1h1m5 0h1m1 0h2m1 0h1m1 0h1m2 0h2m1 0h1m1 0h2m1 0h1m3 0h1m2 0h1m-32 1h1m1 0h3m1 0h1m4 0h4m1 0h2m1 0h1m1 0h2m1 0h6m1 0h1m-32 1h1m1 0h3m1 0h1m1 0h1m2 0h2m1 0h1m2 0h1m4 0h1m3 0h1m1 0h4m-32 1h1m1 0h3m1 0h1m6 0h1m1 0h1m2 0h1m2 0h3m4 0h2m2 0h1m-33 1h1m5 0h1m1 0h2m1 0h3m1 0h1m2 0h1m1 0h2m2 0h1m1 0h1m2 0h1m-30 1h7m3 0h1m4 0h1m1 0h1m3 0h1m2 0h2m2 0h2m1 0h1"/></g></svg></div>
+      <div style="flex:1; min-width:240px">
+        <div class="share">
+          <a class="tg" href="https://t.me/share/url?url=https%3A%2F%2Falexmazuka.github.io%2Fdigital-security%2F&text=%D0%A6%D0%B8%D1%84%D1%80%D0%BE%D0%B2%D0%B0%20%D0%B1%D0%B5%D0%B7%D0%BF%D0%B5%D0%BA%D0%B0%3A%20%D0%BF%D0%B0%D1%80%D0%BE%D0%BB%D1%96%2C%202FA%20%D1%82%D0%B0%20%D0%B7%D0%B0%D1%85%D0%B8%D1%81%D1%82%20%D0%BF%D0%BE%D1%88%D1%82%D0%B8%20%E2%80%94%20%D0%BF%D1%80%D0%BE%D1%81%D1%82%D0%B8%D0%B9%20%D0%BF%D0%BE%D1%81%D1%96%D0%B1%D0%BD%D0%B8%D0%BA" target="_blank" rel="noopener">✈️ Telegram</a>
+          <a class="wa" href="https://wa.me/?text=%D0%A6%D0%B8%D1%84%D1%80%D0%BE%D0%B2%D0%B0%20%D0%B1%D0%B5%D0%B7%D0%BF%D0%B5%D0%BA%D0%B0%3A%20%D0%BF%D0%B0%D1%80%D0%BE%D0%BB%D1%96%2C%202FA%20%D1%82%D0%B0%20%D0%B7%D0%B0%D1%85%D0%B8%D1%81%D1%82%20%D0%BF%D0%BE%D1%88%D1%82%D0%B8%20%E2%80%94%20%D0%BF%D1%80%D0%BE%D1%81%D1%82%D0%B8%D0%B9%20%D0%BF%D0%BE%D1%81%D1%96%D0%B1%D0%BD%D0%B8%D0%BA%20https%3A%2F%2Falexmazuka.github.io%2Fdigital-security%2F" target="_blank" rel="noopener">💬 WhatsApp</a>
+          <a class="vb" href="viber://forward?text=%D0%A6%D0%B8%D1%84%D1%80%D0%BE%D0%B2%D0%B0%20%D0%B1%D0%B5%D0%B7%D0%BF%D0%B5%D0%BA%D0%B0%3A%20%D0%BF%D0%B0%D1%80%D0%BE%D0%BB%D1%96%2C%202FA%20%D1%82%D0%B0%20%D0%B7%D0%B0%D1%85%D0%B8%D1%81%D1%82%20%D0%BF%D0%BE%D1%88%D1%82%D0%B8%20%E2%80%94%20%D0%BF%D1%80%D0%BE%D1%81%D1%82%D0%B8%D0%B9%20%D0%BF%D0%BE%D1%81%D1%96%D0%B1%D0%BD%D0%B8%D0%BA%20https%3A%2F%2Falexmazuka.github.io%2Fdigital-security%2F">📞 Viber</a>
+          <button class="cp" id="copyLink">🔗 Копіювати посилання</button>
+        </div>
+        <button class="btn" onclick="window.print()">🖨 Зберегти у PDF / Роздрукувати</button>
+      </div>
+    </div>
   </section>
 
   <footer>
@@ -657,6 +763,17 @@
           todo.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>';
       }
       res.innerHTML=html;
+    });
+  })();
+
+  /* ===== Копіювати посилання ===== */
+  (function(){
+    var b=document.getElementById('copyLink'); if(!b) return;
+    b.addEventListener('click', function(){
+      var url='https://alexmazuka.github.io/digital-security/';
+      var done=function(){ var t=b.textContent; b.textContent='✅ Скопійовано!'; setTimeout(function(){b.textContent=t;},1800); };
+      if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(done, done); }
+      else { var i=document.createElement('input'); i.value=url; document.body.appendChild(i); i.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(i); done(); }
     });
   })();
 </script>
