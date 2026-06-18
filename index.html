@@ -97,6 +97,29 @@
   .article .at{display:block; color:#fff; font-weight:600; font-size:16px; margin-bottom:2px}
   .article .ad{display:block; color:var(--muted); font-size:14px}
   .article .au{color:var(--accent); font-size:13px}
+  .widget{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:22px 24px; margin:14px 0}
+  .pw-input{width:100%; padding:13px 15px; font-size:17px; border-radius:10px; border:1px solid var(--line); background:#0c1024; color:var(--ink); outline:none}
+  .pw-input:focus{border-color:var(--accent)}
+  .meter{height:14px; background:#0c1024; border-radius:999px; overflow:hidden; margin:14px 0 8px}
+  .meter > div{height:100%; width:0; background:var(--muted); transition:width .25s, background .25s}
+  .pw-label{font-weight:700; font-size:16px}
+  .pw-time{color:var(--muted); font-size:15px; margin-top:2px}
+  .pw-tips{margin:10px 0 0; padding-left:20px; color:var(--muted); font-size:14px}
+  .pw-tips li{margin:3px 0}
+  .qcard{background:var(--card2); border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin:4px 0 14px; font-size:16px; line-height:1.55}
+  .choice{display:flex; gap:12px; flex-wrap:wrap}
+  .qbtn{flex:1; min-width:180px; padding:13px 18px; border-radius:10px; border:1px solid var(--line); background:var(--card2); color:var(--ink); font-size:16px; cursor:pointer; transition:border-color .15s}
+  .qbtn:hover{border-color:var(--accent)}
+  .qbtn:disabled{opacity:.6; cursor:default}
+  .feedback{margin-top:14px; padding:13px 16px; border-radius:10px; font-size:15px; line-height:1.5; display:none}
+  .feedback.ok{background:rgba(55,211,154,.1); border:1px solid rgba(55,211,154,.4); display:block}
+  .feedback.no{background:rgba(255,107,107,.1); border:1px solid rgba(255,107,107,.4); display:block}
+  .result{font-size:17px; margin-top:14px; font-weight:600}
+  .result .score{color:var(--accent2)}
+  .quizrow{display:flex; align-items:flex-start; gap:12px; padding:11px 0; border-bottom:1px solid var(--line); cursor:pointer}
+  .quizrow:last-of-type{border-bottom:none}
+  .quizrow input{width:22px; height:22px; margin-top:2px; accent-color:var(--accent2); flex:0 0 auto; cursor:pointer}
+  .btn[disabled]{opacity:.5}
   @media print{body{background:#fff; color:#000} .card,.check,nav.toc,header.hero{border-color:#ccc; background:#fff} .say{background:#f4f4f4}}
 </style>
 </head>
@@ -119,11 +142,14 @@
     <strong>Зміст</strong>
     <a href="#goal">Навіщо це</a>
     <a href="#passwords">Паролі</a>
+    <a href="#trainer">🔑 Тренажер пароля</a>
     <a href="#manager">Менеджер паролів</a>
     <a href="#2fa">2FA</a>
     <a href="#messengers">Месенджери</a>
     <a href="#phishing">Фішинг</a>
+    <a href="#sim">🎣 Симулятор фішингу</a>
     <a href="#checklist">Чек-лист</a>
+    <a href="#quiz">📊 Тест безпеки</a>
     <a href="#homework">Домашнє</a>
     <a href="#glossary">Словничок</a>
     <a href="#articles">Що почитати</a>
@@ -155,6 +181,18 @@
       </div>
     </div>
     <div class="tip"><b>Лайфхак:</b> придумайте довгу фразу, яку легко згадати, і «зіпсуйте» її цифрами та знаками. Наприклад: «Моя кішка Мурка любить рибу» → <code>МояК1шкаМурк@love#рибу</code>.</div>
+  </section>
+
+  <section id="trainer">
+    <h2>🔑 Тренажер пароля</h2>
+    <p class="sub">Введіть будь-який <b>вигаданий</b> пароль (НЕ ваш справжній!) і подивіться, наскільки він надійний. Усе рахується тут, у браузері — нікуди не надсилається.</p>
+    <div class="widget">
+      <input class="pw-input" id="pwInput" type="text" placeholder="Введіть приклад пароля…" autocomplete="off" spellcheck="false">
+      <div class="meter"><div id="pwMeter"></div></div>
+      <div class="pw-label" id="pwLabel">Почніть вводити…</div>
+      <div class="pw-time" id="pwTime"></div>
+      <ul class="pw-tips" id="pwTips"></ul>
+    </div>
   </section>
 
   <section id="manager">
@@ -284,6 +322,34 @@
     <div class="tip"><b>Золоте правило:</b> якщо вас кваплять і просять код, пароль чи дані картки — це майже завжди шахрайство. Зупиніться й перевірте через офіційний застосунок або сайт.</div>
   </section>
 
+  <section id="sim">
+    <h2>🎣 Симулятор: «Розвод чи ні?»</h2>
+    <p class="sub">Прочитайте повідомлення й вирішіть: це шахрайство чи безпечно? Натисніть відповідь — і побачите розбір.</p>
+    <div class="widget">
+      <div class="qcard" id="simCard"></div>
+      <div class="choice">
+        <button class="qbtn" id="simScam">🚩 Шахрайство</button>
+        <button class="qbtn" id="simSafe">✅ Безпечно</button>
+      </div>
+      <div class="feedback" id="simFb"></div>
+      <button class="btn" id="simNext" style="display:none; margin-top:14px">Далі →</button>
+      <div class="result" id="simResult"></div>
+    </div>
+
+    <h2 style="margin-top:1.6em">🕵️ Гра: «Знайди підробку»</h2>
+    <p class="sub">Який із двох адрес сайту справжній? Натисніть на правильний.</p>
+    <div class="widget">
+      <div class="qcard" id="fakeQ"></div>
+      <div class="choice">
+        <button class="qbtn" id="fakeA"></button>
+        <button class="qbtn" id="fakeB"></button>
+      </div>
+      <div class="feedback" id="fakeFb"></div>
+      <button class="btn" id="fakeNext" style="display:none; margin-top:14px">Далі →</button>
+      <div class="result" id="fakeResult"></div>
+    </div>
+  </section>
+
   <section id="checklist">
     <h2>✅ Мій чек-лист безпеки</h2>
     <p class="sub">Відмічайте пункти, які вже зробили — прогрес зберігається у вашому браузері. Мета — щоб усі галочки були поставлені. Можна роздрукувати.</p>
@@ -300,6 +366,16 @@
       <label><input type="checkbox"><span>Налаштувала приватність у месенджері</span></label>
       <label><input type="checkbox"><span>Знаю, як розпізнати фішинг, і не переходжу за підозрілими посиланнями</span></label>
       <button class="btn ghost" onclick="window.print()">🖨 Роздрукувати чек-лист</button>
+    </div>
+  </section>
+
+  <section id="quiz">
+    <h2>📊 Тест: «Мій рівень цифрової безпеки»</h2>
+    <p class="sub">Відмітьте те, що вже робите — і отримайте свій рівень захисту та список, що варто покращити.</p>
+    <div class="widget">
+      <div id="quizBox"></div>
+      <button class="btn" id="quizSubmit" style="margin-top:16px">Показати результат</button>
+      <div class="result" id="quizResult"></div>
     </div>
   </section>
 
@@ -412,6 +488,175 @@
     update();
     boxes.forEach(function(c){
       c.addEventListener('change', function(){ save(); update(); });
+    });
+  })();
+
+  /* ===== Тренажер пароля ===== */
+  (function(){
+    var inp=document.getElementById('pwInput'); if(!inp) return;
+    var meter=document.getElementById('pwMeter'), label=document.getElementById('pwLabel'),
+        timeEl=document.getElementById('pwTime'), tips=document.getElementById('pwTips');
+    var common=['123456','password','пароль','qwerty','111111','123456789','12345678','12345','abc123','qwerty123','iloveyou','admin','welcome','monkey','dragon','000000','1q2w3e','qwertyuiop'];
+    var log2=function(x){return Math.log(x)/Math.LN2;};
+    function analyze(p){
+      var pool=0;
+      if(/[a-zа-яіїєґ]/.test(p)) pool+=33;
+      if(/[A-ZА-ЯІЇЄҐ]/.test(p)) pool+=33;
+      if(/[0-9]/.test(p)) pool+=10;
+      if(/[^a-zA-Zа-яА-ЯіїєґІЇЄҐ0-9]/.test(p)) pool+=30;
+      var bits = p.length>0 ? p.length*log2(pool||1) : 0;
+      var weak = common.indexOf(p.toLowerCase())>=0 || /^(.)\1+$/.test(p) ||
+                 /^(0123|1234|2345|3456|4567|5678|6789|abcd|qwer|qwert|asdf)/.test(p.toLowerCase());
+      if(weak) bits=Math.min(bits,14);
+      return {bits:bits, weak:weak};
+    }
+    function humanTime(bits){
+      var seconds=Math.pow(2,bits-1)/1e10; // 10 млрд спроб/сек
+      if(seconds<0.5) return 'миттєво';
+      var y=31557600;
+      if(seconds<60) return 'менше хвилини';
+      if(seconds<3600) return Math.round(seconds/60)+' хв';
+      if(seconds<86400) return Math.round(seconds/3600)+' год';
+      if(seconds<y) return Math.round(seconds/86400)+' дн';
+      var yrs=seconds/y;
+      if(yrs<1000) return Math.round(yrs)+' р.';
+      if(yrs<1e6) return Math.round(yrs/1000)+' тис. років';
+      if(yrs<1e9) return Math.round(yrs/1e6)+' млн років';
+      return 'мільярди років';
+    }
+    function update(){
+      var p=inp.value;
+      if(p.length===0){meter.style.width='0'; meter.style.background='var(--muted)'; label.textContent='Почніть вводити…'; label.style.color=''; timeEl.textContent=''; tips.innerHTML=''; return;}
+      var a=analyze(p), bits=a.bits, lvl, col;
+      if(a.weak||bits<28){lvl='Слабкий 🔴'; col='#ff6b6b';}
+      else if(bits<45){lvl='Середній 🟡'; col='#ffb454';}
+      else if(bits<60){lvl='Надійний 🟢'; col='#37d39a';}
+      else {lvl='Дуже надійний 💪'; col='#37d39a';}
+      meter.style.width=Math.min(100,Math.round(bits/72*100))+'%';
+      meter.style.background=col;
+      label.textContent='Рівень: '+lvl; label.style.color=col;
+      timeEl.textContent='Орієнтовний час злому: '+humanTime(bits);
+      var t=[];
+      if(a.weak) t.push('Це дуже поширений або послідовний пароль — його зламають миттєво.');
+      if(p.length<12) t.push('Зробіть пароль довшим (12+ символів).');
+      if(!/[A-ZА-ЯІЇЄҐ]/.test(p)) t.push('Додайте великі літери.');
+      if(!/[0-9]/.test(p)) t.push('Додайте цифри.');
+      if(!/[^a-zA-Zа-яА-ЯіїєґІЇЄҐ0-9]/.test(p)) t.push('Додайте знаки: ! # @ %');
+      if(t.length===0) t.push('Чудово! Такий пароль складно зламати. Зберігайте його в менеджері паролів.');
+      tips.innerHTML=t.map(function(x){return '<li>'+x+'</li>';}).join('');
+    }
+    inp.addEventListener('input', update);
+  })();
+
+  /* ===== Симулятор фішингу ===== */
+  (function(){
+    var data=[
+      {text:'SMS: «Вам нараховано 6600 грн допомоги для переселенців. Отримайте за посиланням: dopomoga-vyplaty.com»', scam:true, why:'Шахрайство. Справжні виплати приходять у застосунку банку або в Дії, а не за зовнішнім посиланням із проханням ввести дані картки.'},
+      {text:'Сповіщення Google: «Виявлено новий вхід у ваш акаунт. Якщо це були не ви — перевірте активність у Налаштуваннях акаунта.» (без сторонніх посилань)', scam:false, why:'Безпечно. Google справді надсилає такі сповіщення й радить зайти в налаштування самостійно. Головне — не натискати чужих посилань.'},
+      {text:'Дзвінок: «Це служба безпеки банку. З вашої картки намагаються зняти гроші. Назвіть код із SMS, щоб скасувати операцію.»', scam:true, why:'Шахрайство. Банк НІКОЛИ не просить код із SMS. Покладіть слухавку й передзвоніть на номер, указаний на звороті картки.'},
+      {text:'Telegram від «Нової Пошти»: «Ваша посилка затримана. Доплатіть 38 грн: np-dostavka.top»', scam:true, why:'Шахрайство. Підозрілий домен (.top), Нова Пошта не бере доплат за такими посиланнями.'},
+      {text:'Email від магазину, де ви щойно зробили замовлення: «Дякуємо за замовлення №12345. Деталі — у вашому кабінеті на офіційному сайті.»', scam:false, why:'Безпечно, якщо ви справді щойно зробили це замовлення й адреса відправника справжня. Усе одно не вводьте пароль за посиланнями з листа — заходьте на сайт вручну.'},
+      {text:'Facebook: «Вашу сторінку буде видалено через порушення. Підтвердіть особу тут: fb-support-verify.com»', scam:true, why:'Шахрайство. Facebook не використовує сторонні домени для підтвердження. Це крадіжка пароля.'}
+    ];
+    var i=0, score=0, answered=false;
+    var card=document.getElementById('simCard'), fb=document.getElementById('simFb'),
+        bScam=document.getElementById('simScam'), bSafe=document.getElementById('simSafe'),
+        next=document.getElementById('simNext'), res=document.getElementById('simResult');
+    function show(){
+      answered=false;
+      card.textContent=data[i].text;
+      fb.className='feedback'; fb.style.display='none';
+      bScam.disabled=false; bSafe.disabled=false; next.style.display='none';
+    }
+    function answer(choice){
+      if(answered) return; answered=true;
+      var correct = (choice==='scam')===data[i].scam;
+      if(correct) score++;
+      fb.className='feedback '+(correct?'ok':'no');
+      fb.innerHTML=(correct?'<b>✅ Правильно!</b> ':'<b>❌ Не зовсім. </b>')+data[i].why;
+      bScam.disabled=true; bSafe.disabled=true;
+      next.style.display = i<data.length-1 ? 'inline-block' : 'none';
+      if(i>=data.length-1){
+        res.innerHTML='Результат: <span class="score">'+score+' з '+data.length+'</span>. '+
+          (score===data.length?'Чудово, вас складно обдурити! 💪':'Тепер ви впізнаєте більшість схем — будьте уважні до посилань і кодів.');
+      }
+    }
+    bScam.addEventListener('click', function(){answer('scam');});
+    bSafe.addEventListener('click', function(){answer('safe');});
+    next.addEventListener('click', function(){ if(i<data.length-1){i++; show();} });
+    show();
+  })();
+
+  /* ===== Гра «Знайди підробку» ===== */
+  (function(){
+    var data=[
+      {real:'privatbank.ua', fake:'privat-bank24.top', why:'Справжній домен ПриватБанку — privatbank.ua. Зайві слова й дефіси («-bank24») та домен «.top» — ознака підробки.'},
+      {real:'google.com', fake:'google-account-verify.com', why:'Справжній — google.com. Усе зайве після слова google («-account-verify») — підробка.'},
+      {real:'novaposhta.ua', fake:'nova-poshta-delivery.com', why:'Справжній — novaposhta.ua. Довгі домени з кількома словами через дефіс — фішинг.'},
+      {real:'diia.gov.ua', fake:'diia-vyplata.com', why:'Державні сервіси завжди закінчуються на gov.ua. «diia-vyplata.com» — підробка.'}
+    ];
+    var i=0, score=0, answered=false;
+    var q=document.getElementById('fakeQ'), fb=document.getElementById('fakeFb'),
+        bA=document.getElementById('fakeA'), bB=document.getElementById('fakeB'),
+        next=document.getElementById('fakeNext'), res=document.getElementById('fakeResult');
+    var realOnA=true;
+    function show(){
+      answered=false;
+      realOnA=Math.random()<0.5;
+      q.textContent='Запитання '+(i+1)+' з '+data.length+': який адрес справжній?';
+      bA.textContent = realOnA ? data[i].real : data[i].fake;
+      bB.textContent = realOnA ? data[i].fake : data[i].real;
+      fb.className='feedback'; fb.style.display='none';
+      bA.disabled=false; bB.disabled=false; next.style.display='none';
+    }
+    function answer(pickedA){
+      if(answered) return; answered=true;
+      var correct = pickedA===realOnA;
+      if(correct) score++;
+      fb.className='feedback '+(correct?'ok':'no');
+      fb.innerHTML=(correct?'<b>✅ Правильно!</b> ':'<b>❌ Ні. </b>')+data[i].why;
+      bA.disabled=true; bB.disabled=true;
+      next.style.display = i<data.length-1 ? 'inline-block' : 'none';
+      if(i>=data.length-1){
+        res.innerHTML='Результат: <span class="score">'+score+' з '+data.length+'</span>. Завжди перевіряйте адресу сайту перед введенням даних!';
+      }
+    }
+    bA.addEventListener('click', function(){answer(true);});
+    bB.addEventListener('click', function(){answer(false);});
+    next.addEventListener('click', function(){ if(i<data.length-1){i++; show();} });
+    show();
+  })();
+
+  /* ===== Тест рівня безпеки ===== */
+  (function(){
+    var box=document.getElementById('quizBox'); if(!box) return;
+    var Q=[
+      'На пошті (Gmail) увімкнена двофакторна автентифікація (2FA)',
+      'Я використовую різні паролі для різних сайтів',
+      'Мої паролі довші за 12 символів',
+      'Я користуюсь менеджером паролів',
+      'У Telegram встановлений хмарний пароль (2FA)',
+      'Я налаштувала приватність у месенджері (сховала номер телефону)',
+      'Я не переходжу за посиланнями з незнайомих SMS і листів',
+      'Я ніколи нікому не повідомляю коди з SMS'
+    ];
+    box.innerHTML=Q.map(function(t,k){
+      return '<label class="quizrow"><input type="checkbox" data-q="'+k+'"><span>'+t+'</span></label>';
+    }).join('');
+    var res=document.getElementById('quizResult');
+    document.getElementById('quizSubmit').addEventListener('click', function(){
+      var checks=box.querySelectorAll('input'); var done=0; var todo=[];
+      checks.forEach(function(c,k){ if(c.checked) done++; else todo.push(Q[k]); });
+      var lvl;
+      if(done>=7) lvl='🟢 Відмінний рівень! Ви добре захищені.';
+      else if(done>=4) lvl='🟡 Непогано, але є над чим попрацювати.';
+      else lvl='🔴 Варто терміново зайнятись безпекою.';
+      var html='Ваш бал: <span class="score">'+done+' з '+Q.length+'</span> — '+lvl;
+      if(todo.length){
+        html+='<div style="font-weight:400; font-size:15px; margin-top:10px; color:var(--muted)">Що варто покращити:<ul style="margin:6px 0 0; padding-left:20px">'+
+          todo.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>';
+      }
+      res.innerHTML=html;
     });
   })();
 </script>
